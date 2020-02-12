@@ -19,7 +19,8 @@ module.exports = function (app) {
     .get(function (req, res){
       var stock = req.query.stock;
       var like = req.query.like || false;
-      var data = 'https://repeated-alpaca.glitch.me/v1/stock/$/quote'
+      var data = `https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`
+      
         MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
           if(err) console.log(err);
           var db = client.db('test');
