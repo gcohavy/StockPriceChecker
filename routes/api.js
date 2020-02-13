@@ -19,7 +19,8 @@ module.exports = function (app) {
     .get(function (req, res){
       var stock = req.query.stock;
       var like = req.query.like || false;
-      var data = JSON.parse(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`);
+      var data = new XMLHttpRequest().open('GET', `https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, false)
+        .send(null);
       console.log(data);
       var price = JSON.parse(data).latestPrice;
       console.log(price);
