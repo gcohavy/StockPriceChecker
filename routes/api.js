@@ -10,18 +10,9 @@
 
 var expect = require('chai').expect;
 var MongoClient = require('mongodb');
+var fetch = require('node-fetch');
 
 const CONNECTION_STRING = process.env.DB; 
-
-var getJSON = function (url, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-  xhr.responseType = 'json';
-  xhr.onload = function () {
-    let status = xhr.status;
-    
-  }
-}
 
 module.exports = function (app) {
 
@@ -30,8 +21,11 @@ module.exports = function (app) {
       var stock = req.query.stock;
       var like = req.query.like || false;
 
-      var data = new XMLHttpRequest().open('GET', `https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, false)
-        .send(null);
+      var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
+        if (err) console.log(err);
+        else return ret;
+      })
+      Promise.resolve(data).then(result => console.log(result));
       console.log(data);
       var price = JSON.parse(data).latestPrice;
       console.log(price);
