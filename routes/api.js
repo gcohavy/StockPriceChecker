@@ -20,9 +20,9 @@ module.exports = function (app) {
       var stock = req.query.stock;
       var like = req.query.like || false;
       var data = `https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`;
-        request(data, (err, something, somewhat) => {
-          
-        })
+      var price = JSON.parse(data).latestPrice;
+      console.log(price);
+      
       
         MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
           if(err) console.log(err);
