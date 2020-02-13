@@ -20,13 +20,21 @@ module.exports = function (app) {
     .get(function (req, res){
       var stock = req.query.stock;
       var like = req.query.like || false;
+      var price = '';
 
       var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
         if (err) console.log(err);
         else return ret;
       })
-      Promise.resolve(data).then(result => console.log(result));
-      console.log(data);
+      Promise.resolve(data).then(result => result.json()).then(result => {
+        
+        var stockData = {
+          stock: result.symbol,
+          price: result.latestPrice,
+          likes: like ? 1 : 0
+        }
+        res.json(stockData);
+      })
       var price = JSON.parse(data).latestPrice;
       console.log(price);
       
