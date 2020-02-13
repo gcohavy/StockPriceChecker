@@ -21,22 +21,20 @@ module.exports = function (app) {
       var stock = req.query.stock;
       var like = req.query.like || false;
       var price = '';
-
+      var stockData;
+    
       var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
         if (err) console.log(err);
         else return ret;
       })
-      Promise.resolve(data).then(result => result.json()).then(result => {
-        
-        var stockData = {
+      Promise.resolve(data).then(result => result.json()).then(result => { 
+        stockData = {
           stock: result.symbol,
           price: result.latestPrice,
           likes: like ? 1 : 0
         }
         res.json(stockData);
-      })
-      var price = JSON.parse(data).latestPrice;
-      console.log(price);
+      });
       
       
         MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {

@@ -23,9 +23,9 @@ suite('Functional Tests', function() {
         .query({stock: 'goog'})
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.equal(res.body.stockData.stock, 'GOOG');
-          assert.property(res.body.stockData, 'price');
-          assert.property(res.body.stockData, 'likes');
+          assert.equal(res.body.stock, 'GOOG');
+          assert.property(res.body, 'price');
+          assert.property(res.body, 'likes');
           done();
         });
       });
