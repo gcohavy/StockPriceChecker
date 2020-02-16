@@ -21,7 +21,6 @@ module.exports = function (app) {
       var stock = req.query.stock;
       var symbol;
       var price;
-      var likes;
       var like = req.query.like || false;
       var price = '';
       var ip = req.connection.remoteAddress;
@@ -39,19 +38,17 @@ module.exports = function (app) {
           var db = client.db('test');
           var collection = db.collection('stocks');
           
-          likes = like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
-              if(err) console.log(err);
-              return ret.value.ips.length;
-            }) : collection.findOne({stock: stock}, (err, ret)=> {
-              return ret.ips.length || 0;
-          })
-          Promise.resolve(likes).then( result => {
-            console.log(likes);
-          })
           stockData = {
             stock: symbol,
             price: price,
-            likes: likes
+            likes: like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
+              if(err) console.log(err);
+              console.log(ret.value.ips.length);
+              return ret.value.ips.length;
+            }) : collection.findOne({stock: stock}, (err, ret)=> {
+              console.log(ret.ips.length);
+              return ret.ips.length || 0;
+          })
           };
           console.log(stockData);
           res.json(stockData);
