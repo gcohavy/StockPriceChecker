@@ -28,23 +28,31 @@ module.exports = function (app) {
         if (err) console.log(err);
         else return ret;
       })
-      Promise.resolve(data).then(result => result.json()).then(result => {
-        stockData = {
-          stock: result.symbol,
-          price: result.latestPrice,
-          likes: like ? 1 : 0
-        }        
-        
-          MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
+      Promise.resolve(data).then(result => result.json()).then(result => { 
+        MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
+          if(err) console.log(err);
+          var db = client.db('test');
+          var collection = db.collection('stocks');
+          stockData = {
+          } 
+          collection.findOneAndUpdate({stock: stock}, {
+            stockData: {
+              stock: result.symbol,
+              price: result.latestPrice,
+              likes: like ? 1 : 0
+            },
+            ipData: {
+              ips: []
+            }
+          }, (err, ret) => {
             if(err) console.log(err);
-            var db = client.db('test');
-            var collection = db.collection('stocks');
-            
-      
+            console.log(stockData);
+          });
+          res.json(stockData);
         });
         
 
-        res.json(stockData);
+        
       });
       
     });
