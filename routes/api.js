@@ -37,21 +37,29 @@ module.exports = function (app) {
           if(err) console.log(err);
           var db = client.db('test');
           var collection = db.collection('stocks');
-          
-          stockData = {
-            stock: symbol,
-            price: price,
-            likes: like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
+          var likes;
+          async function likes () {
+            like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
               if(err) console.log(err);
               console.log(ret.value.ips.length);
               return ret.value.ips.length;
             }) : collection.findOne({stock: stock}, (err, ret)=> {
               console.log(ret.ips.length);
               return ret.ips.length || 0;
-          })
-          };
-          console.log(stockData);
-          res.json(stockData);
+            });
+          }
+          async function sdata () {
+            await likes ();
+            stockData = {
+              stock: symbol,
+              price: price,
+              likes: likes
+            };
+            console.log(stockData);
+            res.json(stockData);
+          }
+          sdata();
+          
         });
         
       });
