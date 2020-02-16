@@ -36,17 +36,16 @@ module.exports = function (app) {
           var collection = db.collection('stocks');
           if (like) {
             collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
+              if(err) console.log(err);
               likes = ret.value.ips.length;
-              console.log(likes);
             });
           }
-          
-          stockData = {
-            stock: result.symbol,
-            price: result.latestPrice,
-            likes: like ? 1 : 0
-          } 
-          res.json(stockData);
+            stockData = {
+              stock: result.symbol,
+              price: result.latestPrice,
+              likes: likes || 0
+            } 
+            res.json(stockData);
         });
         
 

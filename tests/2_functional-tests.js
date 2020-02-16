@@ -31,10 +31,37 @@ suite('Functional Tests', function() {
       });
       
       test('1 stock with like', function(done) {
-        
+        chai.request(server)
+          .get('/api/stock-prices')
+          .query({
+            stock: 'goog',
+            like: true
+          })
+          .end((err, res)=> {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.stock, 'GOOG');
+            assert.property(res.body, 'price');
+            assert.property(res.body, 'likes');
+            assert.equal(res.body.likes, 1);
+            done();
+          })
       });
       
       test('1 stock with like again (ensure likes arent double counted)', function(done) {
+        chai.request(server)
+          .get('/api/stock-prices')
+          .query({
+            stock: 'goog',
+            like: true
+          })
+          .end((err, res)=> {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.stock, 'GOOG');
+            assert.property(res.body, 'price');
+            assert.property(res.body, 'likes');
+            assert.equal(res.body.likes, 1);
+            done();
+          })
         
       });
       
