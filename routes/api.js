@@ -20,6 +20,7 @@ module.exports = function (app) {
     .get(function (req, res){
       var stock = req.query.stock;
       var like = req.query.like || false;
+      var likes;
       var price = '';
       var ip = req.connection.remoteAddress;
       var stockData;
@@ -33,6 +34,12 @@ module.exports = function (app) {
           if(err) console.log(err);
           var db = client.db('test');
           var collection = db.collection('stocks');
+          if (like) {
+            collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
+              likes = ret.value.ips.length;
+              console.log(likes);
+            });
+          }
           
           stockData = {
             stock: result.symbol,
