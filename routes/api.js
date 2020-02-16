@@ -38,18 +38,18 @@ module.exports = function (app) {
           var db = client.db('test');
           var collection = db.collection('stocks');
           var likes;
-          async function likes () {
+          async function resolveLikes () {
             like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
               if(err) console.log(err);
               console.log(ret.value.ips.length);
-              return ret.value.ips.length;
+              likes = ret.value.ips.length;
             }) : collection.findOne({stock: stock}, (err, ret)=> {
               console.log(ret.ips.length);
-              return ret.ips.length || 0;
+              likes = ret.ips.length || 0;
             });
           }
           async function sdata () {
-            await likes ();
+            await resolveLikes ();
             stockData = {
               stock: symbol,
               price: price,
@@ -59,7 +59,6 @@ module.exports = function (app) {
             res.json(stockData);
           }
           sdata();
-          
         });
         
       });
