@@ -21,28 +21,31 @@ module.exports = function (app) {
       var stock = req.query.stock;
       var like = req.query.like || false;
       var price = '';
+      var ip = req.connection.remoteAddress;
       var stockData;
     
       var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
         if (err) console.log(err);
         else return ret;
       })
-      Promise.resolve(data).then(result => result.json()).then(result => { 
+      Promise.resolve(data).then(result => result.json()).then(result => {
         stockData = {
           stock: result.symbol,
           price: result.latestPrice,
           likes: like ? 1 : 0
-        }
+        }        
+        
+          MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
+            if(err) console.log(err);
+            var db = client.db('test');
+            var collection = db.collection('stocks');
+            
+      
+        });
+        
+
         res.json(stockData);
       });
       
-      
-        MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
-          if(err) console.log(err);
-          var db = client.db('test');
-          var collection = db.collection('stocks');
-          
-      
-        });
     });
 };
