@@ -37,20 +37,19 @@ module.exports = function (app) {
           if (like) {
             collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
               if(err) console.log(err);
-              likes = ret.value.ips.length;
             });
-          }
-            stockData = {
-              stock: result.symbol,
-              price: result.latestPrice,
-              likes: likes || 0
-            } 
-            res.json(stockData);
+          };
+          collection.findOne({stock:stock}, (err, ret)=> {
+            if(err) console.log(err);
+            likes = ret.value.
+          })
+          stockData = {
+            stock: result.symbol,
+            price: result.latestPrice,
+            likes: likes
+          };
+          res.json(stockData);
         });
-        
-
-        
       });
-      
     });
 };
