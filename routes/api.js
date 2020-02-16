@@ -19,6 +19,8 @@ module.exports = function (app) {
   app.route('/api/stock-prices')
     .get(function (req, res){
       var stock = req.query.stock;
+      var symbol;
+      var price;
       var like = req.query.like || false;
       var likes;
       var price = '';
@@ -30,25 +32,30 @@ module.exports = function (app) {
         else return ret;
       })
       Promise.resolve(data).then(result => result.json()).then(result => { 
+        symbol = result.symbol;
+        price = result.latestPrice;
         MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
           if(err) console.log(err);
           var db = client.db('test');
           var collection = db.collection('stocks');
+          
           if (like) {
             collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
               if(err) console.log(err);
-              likes = ret.value.ips.length;
-              console.log(likes);
             });
           };
+          collection.findOne({stock: stock}, (err, ret)=> {
+            likes = ret.ips.length || 0;
+          })
+        });
+      }).then(()=>{
           stockData = {
-            stock: result.symbol,
-            price: result.latestPrice,
-            likes: likes || 0
+            stock: symbol,
+            price: price,
+            likes: likes
           };
           console.log(stockData);
           res.json(stockData);
-        });
       });
     });
 };
