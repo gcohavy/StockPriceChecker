@@ -38,23 +38,24 @@ module.exports = function (app) {
           if(err) console.log(err);
           var db = client.db('test');
           var collection = db.collection('stocks');
-          
-          likes = like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
+          if (like) collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
             if(err) console.log(err);
-            console.log(ret.value.ips.length);
-            return ret.value.ips.length;
-          }) : collection.findOne({stock: stock}, (err, ret)=> {
-            console.log(ret.ips.length);
-            return ret.ips.length || 0;
-          });
+          })
+          likes = collection.findOne({stock:stock}, (err, ret)=> {
+            if(err) console.log(err);
+            console.log(ret.ips.length)
+            return ret.ips.length;
+          })
 
-          stockData = {
-            stock: symbol,
-            price: price,
-            likes: likes
-          };
-          console.log(stockData);
-          res.json(stockData);
+          {
+            stockData = {
+              stock: symbol,
+              price: price,
+              likes: likes
+            };
+            console.log(stockData);
+            res.json(stockData);
+          }
        
         });
         
