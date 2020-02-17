@@ -41,13 +41,9 @@ module.exports = function (app) {
           if (like) collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
             if(err) console.log(err);
           })
-          likes = collection.findOne({stock:stock}, (err, ret)=> {
+          collection.findOne({stock:stock}, (err, ret)=> {
             if(err) console.log(err);
-            console.log(ret.ips.length)
-            return ret.ips.length;
-          })
-
-          {
+            likes = ret.ips.length || 0;
             stockData = {
               stock: symbol,
               price: price,
@@ -55,7 +51,7 @@ module.exports = function (app) {
             };
             console.log(stockData);
             res.json(stockData);
-          }
+          })
        
         });
         
