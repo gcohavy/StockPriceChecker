@@ -66,10 +66,38 @@ suite('Functional Tests', function() {
       });
       
       test('2 stocks', function(done) {
+       chai.request(server)
+        .get('/api/stock-prices')
+        .query({stock: ['goog', 'msft']})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body)
+          assert.equal(res.body[0].stock, 'GOOG');
+          assert.property(res.body[0], 'price');
+          assert.property(res.body[0], 'rel_likes');
+          assert.equal(res.body[1].stock, 'MSFT');
+          assert.property(res.body[1], 'price');
+          assert.property(res.body[1], 'rel_likes');
+          done();
+        });
         
       });
       
       test('2 stocks with like', function(done) {
+       chai.request(server)
+        .get('/api/stock-prices')
+        .query({stock: ['goog', 'msft']})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body)
+          assert.equal(res.body[0].stock, 'GOOG');
+          assert.property(res.body[0], 'price');
+          assert.property(res.body[0], 'rel_likes');
+          assert.equal(res.body[1].stock, 'MSFT');
+          assert.property(res.body[1], 'price');
+          assert.property(res.body[1], 'rel_likes');
+          done();
+        });
         
       });
       
