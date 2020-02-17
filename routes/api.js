@@ -39,13 +39,13 @@ module.exports = function (app) {
           var collection = db.collection('stocks');
           var likes;
           async function resolveLikes () {
-            like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
+            likes = like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
               if(err) console.log(err);
               console.log(ret.value.ips.length);
-              likes = ret.value.ips.length;
+              return ret.value.ips.length;
             }) : collection.findOne({stock: stock}, (err, ret)=> {
               console.log(ret.ips.length);
-              likes = ret.ips.length || 0;
+              return ret.ips.length || 0;
             });
           }
           async function sdata () {
