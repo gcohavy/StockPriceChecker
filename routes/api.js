@@ -19,6 +19,7 @@ module.exports = function (app) {
   app.route('/api/stock-prices')
     .get(function (req, res){
       var stock = req.query.stock;
+      var two = Array.isArray(stock);
       var symbol;
       var price;
       var like = req.query.like || false;
