@@ -25,6 +25,7 @@ module.exports = function (app) {
       var price = '';
       var ip = req.connection.remoteAddress;
       var stockData;
+      var likes;
     
       var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
         if (err) console.log(err);
@@ -37,7 +38,7 @@ module.exports = function (app) {
           if(err) console.log(err);
           var db = client.db('test');
           var collection = db.collection('stocks');
-          var likes;
+          
           async function resolveLikes () {
             likes = like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
               if(err) console.log(err);
