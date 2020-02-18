@@ -11,6 +11,8 @@
 var expect = require('chai').expect;
 var MongoClient = require('mongodb');
 var fetch = require('node-fetch');
+var GetData = require('../controllers/getData.js');
+
 
 const CONNECTION_STRING = process.env.DB; 
 
@@ -20,43 +22,11 @@ module.exports = function (app) {
     .get(function (req, res){
       var stock = req.query.stock;
       var two = Array.isArray(stock);
-      var symbol;
-      var price;
       var like = req.query.like || false;
-      var price = '';
       var ip = req.connection.remoteAddress;
       var stockData;
       var likes;
-    
-      var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
-        if (err) console.log(err);
-        else return ret;
-      })
-      Promise.resolve(data).then(result => result.json()).then(result => { 
-        symbol = result.symbol;
-        price = result.latestPrice;
-        MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
-          if(err) console.log(err);
-          var db = client.db('test');
-          var collection = db.collection('stocks');
-          if (like) collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=> {
-            if(err) console.log(err);
-          })
-          collection.findOne({stock:stock}, (err, ret)=> {
-            if(err) console.log(err);
-            likes = ret.ips.length || 0;
-            stockData = {
-              stock: symbol,
-              price: price,
-              likes: likes
-            };
-            console.log(stockData);
-            res.json(stockData);
-          })
-       
-        });
-        
-      });
+
           
     });
 };
