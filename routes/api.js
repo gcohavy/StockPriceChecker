@@ -23,10 +23,12 @@ module.exports = function (app) {
       var ip = req.connection.remoteAddress;
       var stockData;
       var likes;
-    
+      var func = function (info) {
+        return info;
+      }
       if(!two && like) {
-        stockData = getData.data(stock);
-        stockData.likes = getData.likes(stock, like, ip);
+        stockData = getData.data(stock, func);
+        stockData.likes = getData.likes(stock, like, ip, func);
         console.log('Stock Data: ' + stockData);
         return res.json(stockData);
       } else {
