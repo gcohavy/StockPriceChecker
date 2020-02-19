@@ -28,11 +28,11 @@ module.exports = function (app) {
       var likes;
     
       if(!two) {
-        stockData = getData.data(stock);
-        likes = getData.likes(stock, like, ip);
+        stockData = getData.data(stock, () =>{});
+        likes = getData.likes(stock, like, ip, ()=> {});
         stockData.likes = likes;
         console.log(stockData);
-        res.json(stockData);
+        return res.json(stockData);
       } else {
         console.log('twas an array')
       }
