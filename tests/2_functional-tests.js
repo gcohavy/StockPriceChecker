@@ -38,6 +38,7 @@ suite('Functional Tests', function() {
             like: true
           })
           .end((err, res)=> {
+          console.log(res.status);
             assert.equal(res.status, 200);
             assert.equal(res.body.stock, 'GOOG');
             assert.property(res.body, 'price');

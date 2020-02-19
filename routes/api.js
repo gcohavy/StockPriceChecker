@@ -24,7 +24,7 @@ module.exports = function (app) {
       var stockData;
       var likes;
     
-      if(!two) {
+      if(!two && like) {
         stockData = getData.data(stock);
         stockData.likes = getData.likes(stock, like, ip);
         console.log('Stock Data: ' + stockData);
