@@ -9,12 +9,9 @@
 'use strict';
 
 var expect = require('chai').expect;
-var MongoClient = require('mongodb');
 var fetch = require('node-fetch');
 var GetData = require('../controllers/getData.js');
 var getData = new GetData();
-
-const CONNECTION_STRING = process.env.DB; 
 
 module.exports = function (app) {
 
@@ -28,10 +25,9 @@ module.exports = function (app) {
       var likes;
     
       if(!two) {
-        stockData = getData.data(stock, () =>{});
-        likes = getData.likes(stock, like, ip, ()=> {});
-        stockData.likes = likes;
-        console.log(stockData);
+        stockData = getData.data(stock);
+        stockData.likes = getData.likes(stock, like, ip);
+        console.log('Stock Data: ' + stockData);
         return res.json(stockData);
       } else {
         console.log('twas an array')
