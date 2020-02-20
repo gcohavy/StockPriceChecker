@@ -19,13 +19,17 @@ module.exports = function(app) {
     var two = Array.isArray(stock);
     var like = req.query.like || false;
     var ip = req.connection.remoteAddress;
-    var stockData;
+    var stockData = two ? [] : undefined;
     var likes;
     var test;
-    var logging = function(info) {
-      console.log(info);
+    var callback = function(which, info) {
+      if (which === 'data') {
+        two ? stockData.push(info) : stockData = info;
+      } else {
+        
+      }
     };
 
-    stockData = getData.data(stock, logging);
+    getData.data(stock, callback);
   });
 };
