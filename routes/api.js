@@ -37,8 +37,9 @@ module.exports = function(app) {
           } else {
             stockData[1].rel_likes = likes[0] - likes[1];
             stockData[0].rel_likes = likes[1] - likes[0];
+            console.log(likes);
+            return res.json(stockData);
           }
-          return res.json(stockData);
         }
       }
 
