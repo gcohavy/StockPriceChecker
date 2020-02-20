@@ -70,6 +70,7 @@ suite('Functional Tests', function() {
         .get('/api/stock-prices')
         .query({stock: ['goog', 'msft']})
         .end(function(err, res){
+          console.log(res.body);
           assert.equal(res.status, 200);
           assert.isArray(res.body)
           assert.equal(res.body[0].stock, 'MSFT');
@@ -86,8 +87,9 @@ suite('Functional Tests', function() {
       test('2 stocks with like', function(done) {
        chai.request(server)
         .get('/api/stock-prices')
-        .query({stock: ['goog', 'msft']})
+        .query({stock: ['goog', 'msft'], like:true})
         .end(function(err, res){
+          console.log(res.body); 
           assert.equal(res.status, 200);
           assert.isArray(res.body)
           assert.equal(res.body[0].stock, 'MSFT');

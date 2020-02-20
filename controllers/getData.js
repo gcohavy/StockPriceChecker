@@ -24,10 +24,10 @@ function GetData () {
       var collection = db.collection('likes');
       like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=>{
         if(err) console.log(err);
-        callback('likes', ret.value.ips.length);
+        callback('', {stock:stock, likes: ret.value.ips.length});
       }) : collection.findOne({stock: stock}, (err, ret) => {
         if(err) console.log(err);
-        callback('likes', ret.ips.length ? ret.ips.length : 0);
+        callback('',{ stock: stock, likes: ret.ips.length ? ret.ips.length : 0});
       });
     });
   }
