@@ -25,14 +25,20 @@ module.exports = function (app) {
       var likes;
       var test;
       
-          stockData = getData.data(stock);
+      stockData = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
+        if (err) console.log(err);
+        console.log('defining data');
+        return ret;
+      });
+    Promise.resolve(stockData).then(result => result.json()).then(result => {
+      return console.log({
+        stock: result.symbol,
+        price: result.latestPrice
+      })
+    });
+      return 0;
+
       
-      async function sendData() {
-        await fillData();
-        console.log(test + ': ' + stockData);
-      }
-    
-      sendData();
 
           
     });
