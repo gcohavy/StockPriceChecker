@@ -26,18 +26,22 @@ module.exports = function(app) {
     var callback = function(which, info) {
       if (which === 'data') {
         two ? stockData.push(info) : stockData = info;
+      } else if (!two) {
+        stockData.likes = info
+        return res.json(stockData);
       } else {
-        if (!two) {
-          stockData.likes = info
-        } else {
-          rel_likes.push(info);
-          for(var i = 0; i<2; i++) {
-            stockData[i].rel_likes = Math.difference()
-          }
-        }
-        res.json(stockData);
+        rel_likes.push(info);
+        stockData[0].rel_likes = rel_likes[0] - rel_likes[1];
+        stockData[1].rel_likes = rel_likes[1] - rel_likes[0];
+        
       }
+      if (stockData !== undefined && stockData !== []) {
+        res.json(stockData);
+      } else {
+        console.log(stockData);
+      } 
     };
+    
     if ( !two ) {
       getData.data(stock, callback);
       getData.likes(stock, like, ip, callback);
