@@ -20,8 +20,7 @@ module.exports = function(app) {
     var like = req.query.like || false;
     var ip = req.connection.remoteAddress;
     var stockData = two ? [] : undefined;
-    var likes;
-    var rel_likes = [];
+    var likes = [];
     var test;
     var callback = function(which, info) {
       if (which === 'data') {
@@ -30,16 +29,14 @@ module.exports = function(app) {
         stockData.likes = info
         return res.json(stockData);
       } else {
-        rel_likes.push(info);
-        stockData[0].rel_likes = rel_likes[0] - rel_likes[1];
-        stockData[1].rel_likes = rel_likes[1] - rel_likes[0];
-        
+        likes.push(info);
+        if(likes.length==2) {
+          stockData[0].rel_likes = likes[0] - likes[1];
+          stockData[1].rel_likes = likes[1] - likes[0];
+          res.json(stockData);
+        }
       }
-      if (stockData !== undefined && stockData !== []) {
-        res.json(stockData);
-      } else {
-        console.log(stockData);
-      } 
+
     };
     
     if ( !two ) {
@@ -50,7 +47,6 @@ module.exports = function(app) {
       getData.data(stock[1], callback);
       getData.likes(stock[0], like, ip, callback);
       getData.likes(stock[1], like, ip, callback);
-      console.log(stockData);
     }
   });
 };
