@@ -24,19 +24,11 @@ module.exports = function (app) {
       var stockData;
       var likes;
       var test;
+      var logging = function (info) {
+        console.log(info);
+      }
       
-      stockData = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
-        if (err) console.log(err);
-        console.log('defining data');
-        return ret;
-      });
-    Promise.resolve(stockData).then(result => result.json()).then(result => {
-      return console.log({
-        stock: result.symbol,
-        price: result.latestPrice
-      })
-    });
-      return 0;
+      stockData = getData.data(stock, logging);
 
       
 

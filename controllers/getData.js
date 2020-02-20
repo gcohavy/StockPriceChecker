@@ -4,18 +4,16 @@ var fetch = require('node-fetch');
 const CONNECTION_STRING = process.env.DB; 
 
 function GetData () {
-  this.data = function(stock) {
-    console.log('inside the data function with: ' + stock);
+  this.data = function(stock, callback) {
     var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
         if (err) console.log(err);
-        console.log('defining data');
         return ret;
       });
     Promise.resolve(data).then(result => result.json()).then(result => {
-      return {
+      callback ({
         stock: result.symbol,
         price: result.latestPrice
-      };
+      });
     }); 
   }
   
