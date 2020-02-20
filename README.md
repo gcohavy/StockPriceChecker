@@ -2,6 +2,7 @@ Backend Information Security and Quality Assurance
 ------
 
 Project Stock Price Checker
+Built with Node.js and Express
 
 To make it work, you must connect to the DataBase.
 1) Create a .env file and set DB to your mongo connection string
