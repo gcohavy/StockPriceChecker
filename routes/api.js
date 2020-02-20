@@ -21,19 +21,24 @@ module.exports = function(app) {
     var ip = req.connection.remoteAddress;
     var stockData = two ? [] : undefined;
     var likes = [];
-    var test;
+    
     var callback = function(which, info) {
       if (which === 'data') {
         two ? stockData.push(info) : stockData = info;
       } else if (!two) {
-        stockData.likes = info
+        stockData.likes = info.likes
         return res.json(stockData);
       } else {
         likes.push(info);
         if(likes.length==2) {
-          stockData[0].rel_likes = likes[0] - likes[1];
-          stockData[1].rel_likes = likes[1] - likes[0];
-          res.json(stockData);
+          if (stockData[0].stock == likes[0].stock) {
+            stockData[0].rel_likes = likes[0] - likes[1];
+            stockData[1].rel_likes = likes[1] - likes[0];
+          } else {
+            stockData[1].rel_likes = likes[0] - likes[1];
+            stockData[0].rel_likes = likes[1] - likes[0];
+          }
+          return res.json(stockData);
         }
       }
 

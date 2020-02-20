@@ -73,12 +73,14 @@ suite('Functional Tests', function() {
           console.log(res.body);
           assert.equal(res.status, 200);
           assert.isArray(res.body)
-          assert.equal(res.body[0].stock, 'MSFT');
+          assert.exists(res.body[0].stock);
           assert.property(res.body[0], 'price');
           assert.property(res.body[0], 'rel_likes');
-          assert.equal(res.body[1].stock, 'GOOG');
+          assert.exists(res.body[1].stock);
           assert.property(res.body[1], 'price');
           assert.property(res.body[1], 'rel_likes');
+          assert.isNotNull(res.body[0].rel_likes, 'rel_likes came out to null');
+          assert.isNotNull(res.body[1].rel_likes, 'rel_likes came out to null');
           done();
         });
         
@@ -92,12 +94,14 @@ suite('Functional Tests', function() {
           console.log(res.body); 
           assert.equal(res.status, 200);
           assert.isArray(res.body)
-          assert.equal(res.body[0].stock, 'MSFT');
+          assert.exists(res.body[0].stock);
           assert.property(res.body[0], 'price');
           assert.property(res.body[0], 'rel_likes');
-          assert.equal(res.body[1].stock, 'GOOG');
+          assert.exists(res.body[1].stock);
           assert.property(res.body[1], 'price');
           assert.property(res.body[1], 'rel_likes');
+          assert.isNotNull(res.body[0].rel_likes, 'rel_likes came out to null');
+          assert.isNotNull(res.body[1].rel_likes, 'rel_likes came out to null');
           done();
         });
         
