@@ -4,30 +4,30 @@ var fetch = require('node-fetch');
 const CONNECTION_STRING = process.env.DB; 
 
 function GetData () {
-  this.data = function(stock, callback) {
+  this.data = function(stock) {
     var data = fetch(`https://repeated-alpaca.glitch.me/v1/stock/${stock}/quote`, (err, ret) => {
         if (err) console.log(err);
         else ret;
       });
     Promise.resolve(data).then(result => result.json()).then(result => {
-      callback({
+      return {
         stock: result.symbol,
         price: result.latestPrice
-      });
+      };
     }); 
   }
   
-  this.likes = function(stock, like, ip, callback) {
+  this.likes = function(stock, like, ip) {
     MongoClient.connect(CONNECTION_STRING, {useUnifiedTopology: true}, function(err, client) {
       if(err) console.log(err);
       var db = client.db('test');
       var collection = db.collection('likes');
       like ? collection.findOneAndUpdate({stock: stock}, {$addToSet: {ips: ip}}, {upsert: true}, (err, ret)=>{
         if(err) console.log(err);
-        callback(ret.value.ips.length);
+        return ret.value.ips.length;
       }) : collection.findOne({stock: stock}, (err, ret) => {
         if(err) console.log(err);
-        callback(ret.ips.length ? ret.ips.length : 0);
+        return ret.ips.length ? ret.ips.length : 0;
       });
     });
   }
