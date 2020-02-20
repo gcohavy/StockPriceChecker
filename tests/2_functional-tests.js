@@ -72,10 +72,10 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.isArray(res.body)
-          assert.equal(res.body[0].stock, 'GOOG');
+          assert.equal(res.body[0].stock, 'MSFT');
           assert.property(res.body[0], 'price');
           assert.property(res.body[0], 'rel_likes');
-          assert.equal(res.body[1].stock, 'MSFT');
+          assert.equal(res.body[1].stock, 'GOOG');
           assert.property(res.body[1], 'price');
           assert.property(res.body[1], 'rel_likes');
           done();
@@ -90,10 +90,10 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.isArray(res.body)
-          assert.equal(res.body[0].stock, 'GOOG');
+          assert.equal(res.body[0].stock, 'MSFT');
           assert.property(res.body[0], 'price');
           assert.property(res.body[0], 'rel_likes');
-          assert.equal(res.body[1].stock, 'MSFT');
+          assert.equal(res.body[1].stock, 'GOOG');
           assert.property(res.body[1], 'price');
           assert.property(res.body[1], 'rel_likes');
           done();

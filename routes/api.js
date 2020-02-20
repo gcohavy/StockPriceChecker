@@ -21,15 +21,32 @@ module.exports = function(app) {
     var ip = req.connection.remoteAddress;
     var stockData = two ? [] : undefined;
     var likes;
+    var rel_likes = [];
     var test;
     var callback = function(which, info) {
       if (which === 'data') {
         two ? stockData.push(info) : stockData = info;
       } else {
-        
+        if (!two) {
+          stockData.likes = info
+        } else {
+          rel_likes.push(info);
+          for(var i = 0; i<2; i++) {
+            stockData[i].rel_likes = Math.difference()
+          }
+        }
+        res.json(stockData);
       }
     };
-
-    getData.data(stock, callback);
+    if ( !two ) {
+      getData.data(stock, callback);
+      getData.likes(stock, like, ip, callback);
+    } else {
+      getData.data(stock[0], callback);
+      getData.data(stock[1], callback);
+      getData.likes(stock[0], like, ip, callback);
+      getData.likes(stock[1], like, ip, callback);
+      console.log(stockData);
+    }
   });
 };
