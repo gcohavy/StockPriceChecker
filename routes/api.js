@@ -31,18 +31,16 @@ module.exports = function(app) {
       } else {
         likes.push(info);
         if(likes.length==2) {
-          if (stockData[0].stock == likes[0].stock) {
-            stockData[0].rel_likes = likes[0] - likes[1];
-            stockData[1].rel_likes = likes[1] - likes[0];
+          if (stockData[0].stock.toLowerCase() == likes[0].stock) {
+            stockData[0].rel_likes = likes[0].likes - likes[1].likes;
+            stockData[1].rel_likes = likes[1].likes - likes[0].likes;
           } else {
-            stockData[1].rel_likes = likes[0] - likes[1];
-            stockData[0].rel_likes = likes[1] - likes[0];
-            console.log(likes);
-            return res.json(stockData);
+            stockData[1].rel_likes = likes[0].likes - likes[1].likes;
+            stockData[0].rel_likes = likes[1].likes - likes[0].likes;
           }
+          return res.json(stockData);
         }
       }
-
     };
     
     if ( !two ) {
