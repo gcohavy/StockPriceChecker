@@ -23,10 +23,16 @@ module.exports = function (app) {
       var ip = req.connection.remoteAddress;
       var stockData;
       var likes;
+      var test;
+      
+          stockData = getData.data(stock);
+      
+      async function sendData() {
+        await fillData();
+        console.log(test + ': ' + stockData);
+      }
     
-      do {
-        stockData = getData
-      } while(stockData===null) 
+      sendData();
 
           
     });
